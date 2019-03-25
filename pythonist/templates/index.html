@@ -5,7 +5,23 @@
     <title>Pythonist</title>
 </head>
 <body>
-    Hi there!
-
+Hi there!
+<form method="post">
+    {% csrf_token %}
+    <div style="display: flex; flex-flow: row; font-family: 'Courier New'">
+        <div style="flex: 0.5;padding: 1em">
+            <div style="">
+                <textarea type="text" name="program" aria-multiline="true" id="" autofocus
+                          style="width: 100%; height: 300px">{{ code }}</textarea>
+            </div>
+        </div>
+        <div style="flex: 0.5;padding: 1em; padding-top: 0">
+            <div style="background-color: black; color: white; ">
+                <pre>{{ reply }}</pre>
+            </div>
+        </div>
+    </div>
+    <input type="submit">
+</form>
 </body>
 </html>

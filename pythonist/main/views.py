@@ -5,6 +5,16 @@ import time
 import os
 import re
 
+possible_errors = [
+    {"error": "is not defined", "comment": "Вы использовали переменную, для которой не задали никаких значений. Например, вы могли написать print(a+b), но не объявили a или b."},
+    {"error": "unsupported operand type(s)", "comment": "Вы пытаетесь сложить несовместимые типы данных. Например, одна из переменных строковая, а другая - числовая. Необходимо привести обе переменные к одному типу."},
+]
+
+possible_results = [
+    {"result": "23", "comment": "Вы сложили два числа как строки. Необходимо преобразовать их в числа. Для этого воспользуйтесь фукнцией int(). Например, a = int(a)."},
+    {"result": "5", "comment": "Вы всё сделали правильно! Поздравляю!"},
+]
+
 def index(request):
     context = {"reply":"", "code":""}
 
@@ -24,12 +34,30 @@ def index(request):
         pstatus = proc.poll()
         if pstatus is None:
             proc.kill()
-            context["reply"] = "Killed :("
+            context["reply"] = "Ваша программа зависла. Мы не стали ждать и прервали её. Простите."
         else:
             try:
-                context["reply"] = proc.stdout.read().decode() + proc.stderr.read().decode()
+                comments = ""
+                errors = proc.stderr.read().decode()
+                result = proc.stdout.read().decode()
+
+                for p_e in possible_errors:
+                    if p_e["error"] in errors:
+                        comments = p_e["comment"]
+
+                for p_e in possible_results:
+                    if p_e["result"].strip() == result.strip():
+                        comments = p_e["comment"]
+
+                if "input(" not in prog:
+                    comments = "Для начала рекомендуем считать эти два числа с помощью фукнции input. Например, a=input()."
+
+                if len(errors.strip()) + len(comments) == 0:
+                    comments = "Вроде бы программа отработала без ошибок. Но результат неверный."
+
+                context["reply"] = result + errors + "\n\n" + comments
             except Exception as e:
-                context["reply"] = "Something is wrong<br>"+str(e)
+                context["reply"] = "Ошибка вышла, вот о чем молчит наука: "+str(e)
 
 
     return render(request,"index.html",context=context)

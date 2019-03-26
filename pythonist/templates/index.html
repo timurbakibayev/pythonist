@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Pythonist</title>
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Chettan" rel="stylesheet">
 </head>
 <body>
-Hi there!
+<div style="text-align: center; display: flex; flex-flow: column;font-family: 'Baloo Chettan', cursive; font-size: 2em">
+    <span>Pythonist</span>
+</div>
 <form method="post">
     {% csrf_token %}
     <div style="display: flex; flex-flow: row; font-family: 'Courier New'">
@@ -15,13 +18,25 @@ Hi there!
                           style="width: 100%; height: 300px">{{ code }}</textarea>
             </div>
         </div>
-        <div style="flex: 0.5;padding: 1em; padding-top: 0">
-            <div style="background-color: black; color: white; ">
-                <pre>{{ reply }}</pre>
+        <div style="flex: 0.5;padding: 1em">
+            <div style="">
+                <textarea type="text" name="results" aria-multiline="true"
+                          style="width: 100%; height: 300px; color: white; background-color: black">{{ reply }}</textarea>
             </div>
         </div>
     </div>
-    <input type="submit">
+    <div style="text-align: center;
+        display: flex;
+        flex-flow: column;
+        font-family: 'Baloo Chettan', cursive;
+        font-size: 1.5em; width: 50%;text-align: left;">
+        <input type="submit" value="Отправить на сервер" style="
+            margin: 2em;
+            margin-top: 0;
+            border-radius: 10px;
+            padding: 1em;">
+        <span style=" margin-left: 2em">Условия задачи: даны числа a,b. Необходимо вывести сумму этих чисел.</span>
+    </div>
 </form>
 </body>
 </html>
